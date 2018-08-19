@@ -28,7 +28,8 @@ const randomTime = () => {
       , scheduledTime = currentTime + randomDelay;
   
   // create a new Date object to get the scheduled time's hour
-  const scheduledHour = new Date(scheduledTime).getHours();
+  // accounts for timezone by subtracting 6
+  const scheduledHour = new Date(scheduledTime).getHours() - 6; 
 
   // generate a different delay if scheduledHour is too early or late
   if (scheduledHour < 10 || scheduledHour > 19) {
