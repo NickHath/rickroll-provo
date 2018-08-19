@@ -38,6 +38,8 @@ const randomTime = () => {
     // const scheduledHourMinute = scheduledDate.split(',')[1];
     // const messageBody = `Rickrolling Provo tomorrow at${scheduledHourMinute}`;
     // send myself text with the scheduled time
+
+    const messageBody = `Rickrolling Provo tomorrow at ${scheduledTime} UNIX epoch time`;
     const { PERSONAL_NUMBER, TWILIO_NUMBER } = process.env;
     sendText(PERSONAL_NUMBER, TWILIO_NUMBER, messageBody);
     return randomDelay;
