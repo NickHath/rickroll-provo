@@ -4,20 +4,18 @@ require('dotenv').config();
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } = process.env;
 const twilioClient = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
-// texts art installation using Twilio #
-const rickroll = () => {
-  const { INSTALLATION_PHONE_NUMBER, TWILIO_NUMBER } = process.env;
-  console.log(`Texting rickroll... to ${INSTALLATION_PHONE_NUMBER}`);
-
-  const smsDetails = {
-    to: INSTALLATION_PHONE_NUMBER,
-    from: TWILIO_NUMBER,
-    body: 'rickroll'
-  };
-
-  twilioClient.messages.create(smsDetails)
+// sends text to number
+const sendText = (to, from, body) => {
+  twilioClient.messages.create({ to, from, body })
     .then(console.log)
     .catch(console.error);
+}
+
+// texts art installation using Twilio #
+const rickroll = () => {
+  const messageBody = 'rickroll';
+  const { INSTALLATION_PHONE_NUMBER, TWILIO_NUMBER } = process.env;
+  sendText(INSTALLATION_PHONE_NUMBER, TWILIO_NUMBER, messageBody);
 }
 
 const randomTime = () => {
@@ -31,11 +29,18 @@ const randomTime = () => {
   // accounts for timezone by subtracting 6
   const scheduledHour = new Date(scheduledTime).getHours() - 6; 
 
-  // generate a different delay if scheduledHour is too early or late
   if (scheduledHour < 10 || scheduledHour > 19) {
+    // generate a different delay if scheduledHour is too early or late
     return randomTime();
   } else {
-    console.log(`Texting art installation between ${scheduledHour}:00 and ${scheduledHour}:59 tomorrow`);
+    // nasty date formatting with epoch time
+    const scheduledDate = new Date(scheduledTime).toLocaleDateString('en-US', { timeZone: 'America/Denver', hour12: true, hour: 'numeric', minute: 'numeric'  });
+    const scheduledHourMinute = scheduledDate.split(',')[1];
+    const messageBody = `Rickrolling Provo tomorrow at${scheduledHourMinute}`;
+    // send myself text with the scheduled time
+    const { PERSONAL_NUMBER, TWILIO_NUMBER } = process.env;
+    sendText(PERSONAL_NUMBER, TWILIO_NUMBER, messageBody);
+
     return randomDelay;
   }
 }
