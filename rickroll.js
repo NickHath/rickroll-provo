@@ -34,13 +34,12 @@ const randomTime = () => {
     return randomTime();
   } else {
     // nasty date formatting with epoch time
-    const scheduledDate = new Date(scheduledTime).toLocaleDateString('en-US', { timeZone: 'America/Denver', hour12: true, hour: 'numeric', minute: 'numeric'  });
-    const scheduledHourMinute = scheduledDate.split(',')[1];
-    const messageBody = `Rickrolling Provo tomorrow at${scheduledHourMinute}`;
+    // const scheduledDate = new Date(scheduledTime).toLocaleDateString('en-US', { timeZone: 'America/Denver', hour12: true, hour: 'numeric', minute: 'numeric'  });
+    // const scheduledHourMinute = scheduledDate.split(',')[1];
+    // const messageBody = `Rickrolling Provo tomorrow at${scheduledHourMinute}`;
     // send myself text with the scheduled time
     const { PERSONAL_NUMBER, TWILIO_NUMBER } = process.env;
     sendText(PERSONAL_NUMBER, TWILIO_NUMBER, messageBody);
-
     return randomDelay;
   }
 }
